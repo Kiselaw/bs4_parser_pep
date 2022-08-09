@@ -153,9 +153,6 @@ def pep(session):
             )
         if status_in[0].text in 'Active/Accepted':
             results['Active/Accepted'] += 1
-        # Если праивльно понял, то, если как примере,
-        # то у меня Active и Accepted буду отдельно,
-        # а мне хочется именно в один статус их запихать
         else:
             results[status_in[0].text] += 1
     results = list(results.items())
