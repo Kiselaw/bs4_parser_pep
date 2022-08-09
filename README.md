@@ -72,7 +72,7 @@ Launch:
 In order to launch you have to use the following commands:
 
 ```bash
-python arg_parsing.py -h (--help)  - shows which commands are allowed
+python arg_parsing.py -h (--help) - shows which commands are allowed
 ```
 
 ```bash
@@ -97,7 +97,7 @@ Cash  clearing:
 python main.py <command> -c (--clear-cache)
 ```
 
-ALso, there is an optional arguments specifically for latest-versions, whats-new and pep:
+Also, there is an optional arguments specifically for latest-versions, whats-new and pep:
 
 ```bash
 python main.py <command> -o (--output) with pretty or file
