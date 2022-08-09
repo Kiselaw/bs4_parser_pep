@@ -1,3 +1,4 @@
+import logging
 import re
 from urllib.parse import urljoin
 
@@ -5,11 +6,10 @@ import requests_cache
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
-from constants import BASE_DIR, MAIN_DOC_URL, MAIN_PEP_URL, EXPECTED_STATUS
 from configs import configure_argument_parser, configure_logging
+from constants import BASE_DIR, EXPECTED_STATUS, MAIN_DOC_URL, MAIN_PEP_URL
 from outputs import control_output
-import logging
-from utils import get_response, find_tag
+from utils import find_tag, get_response
 
 
 def whats_new(session):
@@ -103,12 +103,10 @@ def pep(session):
     )
     statuses = []
     for tag in td_tags:
-        if tag.text is None:
+        if tag.text is None or len(tag.text) == 1:
             statuses.append('')
-        elif len(tag.text) > 1:
-            statuses.append(tag.text[1])
         else:
-            statuses.append('')
+            statuses.append(tag.text[1])
     statuses.append('')
     results = {
         'Статус': 'Количество',
@@ -133,6 +131,13 @@ def pep(session):
                 r"""Rejected|Superseded|Withdrawn|Draft){1}$"""
             )
         )
+        try:
+            EXPECTED_STATUS[status]
+        except KeyError:
+            logging.info(
+                f'Неизвестный статус: {status}'
+            )
+            continue
         if len(status_in) == 0:
             logging.info(
                 f"""Несовпадающие статусы\n"""
@@ -148,6 +153,9 @@ def pep(session):
             )
         if status_in[0].text in 'Active/Accepted':
             results['Active/Accepted'] += 1
+        # Если праивльно понял, то, если как примере,
+        # то у меня Active и Accepted буду отдельно,
+        # а мне хочется именно в один статус их запихать
         else:
             results[status_in[0].text] += 1
     results = list(results.items())
