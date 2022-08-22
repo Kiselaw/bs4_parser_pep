@@ -1,4 +1,4 @@
-## Python documentation parser
+## Python PEP parser (bs4)
 
 A simple parser collects various data from Python documentation. 
 
